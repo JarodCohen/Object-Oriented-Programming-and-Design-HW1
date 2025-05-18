@@ -43,7 +43,7 @@ package homework1;
  * </pre>
  **/
 public class GeoSegment {
-	final string name;
+	final String name;
 	final GeoPoint p1;
 	final GeoPoint p2;
 	final double length;
@@ -63,7 +63,7 @@ public class GeoSegment {
 		this.p1 = p1;
 		this.p2 = p2;
 		this.length = p1.distanceTo(p2);
-		this.heading = p1.getHeading(p2);
+		this.heading = p1.headingTo(p2);
 	}
 
 	/**
@@ -159,8 +159,7 @@ public class GeoSegment {
 	 * @return a string representation of this.
 	 **/
 	public String toString() {
-		return "GeoSegment [name=" + name + ", p1=" + p1 + ", p2=" + p2 + ", length=" + length + ", heading="
-				+ heading + "]";
+		return  "(\"" + name + "\"," + p1 + ", " + p2 + ")";
 	}
 
 }

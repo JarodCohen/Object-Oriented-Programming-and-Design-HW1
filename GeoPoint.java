@@ -218,9 +218,7 @@ public class GeoPoint {
 	 * @return a string representation of this GeoPoint.
 	 **/
 	public String toString() {
-		double lat = latitude / 1000000;
-		double lon = longitude / 1000000;
-		return "(" + lat + ", " + lon + ")";
+		return "(" + latitude + ", " + longitude + ")";
 	}
 
 }

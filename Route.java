@@ -2,6 +2,7 @@ package homework1;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A Route is a path that traverses arbitrary GeoSegments, regardless
@@ -153,20 +154,23 @@ public class Route {
       if (gs == null) {
          throw new IllegalArgumentException("GeoSegment cannot be null");
       }
-      if (!this.end.equals(gs.p1) || !this.name.equals(gs.name)) {
+      // if (!this.end.equals(gs.p1) || !this.name.equals(gs.name)) {
+      //    throw new IllegalArgumentException("GeoSegment does not match");
+      // }
+      if (!this.end.equals(gs.p1)) {
          throw new IllegalArgumentException("GeoSegment does not match");
       }
 
-      List<GeoSegment> newSegments = new List<GeoSegment>(this.geoSegments);
+      List<GeoSegment> newSegments = new ArrayList<GeoSegment>(this.geoSegments);
       newSegments.add(gs);
       List<GeoFeature> newGeoFeatures;
-      if (geoFeatures.get(-1).getName().equals(gs.getName())) {
-         newGeoFeatures = new List<GeoFeature>(this.geoFeatures);
-         GeoFeature tmp = geoFeatures.get(-1).addSegment(gs);
-         newGeoFeatures.remove(-1);
+      if (geoFeatures.get(geoFeatures.size()-1).getName().equals(gs.getName())) {
+         newGeoFeatures = new ArrayList<GeoFeature>(this.geoFeatures);
+         GeoFeature tmp = geoFeatures.get(geoFeatures.size()-1).addSegment(gs);
+         newGeoFeatures.remove(geoFeatures.size()-1);
          newGeoFeatures.add(tmp);
       } else {
-         newGeoFeatures = new List<GeoFeature>(this.geoFeatures);
+         newGeoFeatures = new ArrayList<GeoFeature>(this.geoFeatures);
          newGeoFeatures.add(new GeoFeature(gs));
       }
 
@@ -177,8 +181,8 @@ public class Route {
             gs.heading,
             this.length + gs.length,
             gs,
-            newSegments,
-            newGeoFeatures);
+            List.copyOf(newSegments),
+            List.copyOf(newGeoFeatures));
    }
 
    /**
@@ -268,6 +272,13 @@ public class Route {
     * @return a string representation of this.
     **/
    public String toString() {
+      StringBuilder sb = new StringBuilder();
+      sb.append("Route [start=").append(start).append(", end=").append(end)
+            .append(", startHeading=").append(startHeading).append(", endHeading=")
+            .append(endHeading).append(", length=").append(length)
+            .append(", endingGeoSegment=").append(endingGeoSegment)
+            .append(", geoSegments=").append(geoSegments).append("]");
+      return sb.toString();
    }
 
 }

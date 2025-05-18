@@ -1,6 +1,6 @@
 package homework1;
 
-
+import java.util.Iterator;
 /**
  * A RouteFormatter class knows how to create a textual description of
  * directions from one location to another. The class is abstract to
@@ -23,8 +23,21 @@ public abstract class RouteFormatter {
 		// This method should call computeLine() for each geographic
 		// feature in this route and concatenate the results into a single
 		// String.
-  		
-  		// TODO Implement this method
+  		if(route == null){
+         throw new IllegalArgumentException("Route must not be null");
+      }
+      if(heading < 0 || heading >= 360) {
+  			throw new IllegalArgumentException("heading must be between 0 and 360");
+  		}
+  		StringBuffer directions = new StringBuffer();
+  		Iterator<GeoFeature> it = route.getGeoFeatures();
+  		while(it.hasNext()) {
+  			GeoFeature geoFeature = it.next();
+  			directions.append(computeLine(geoFeature, heading));
+  			heading = geoFeature.getEndHeading();
+  			
+  		}
+  		return directions.toString();
   	}
 
 
@@ -61,7 +74,32 @@ public abstract class RouteFormatter {
      * and likewise for left turns.
      */
   	protected String getTurnString(double origHeading, double newHeading) {
-  		// TODO Implement this method
+  		if (origHeading < 0 || origHeading >= 360) {
+  			throw new IllegalArgumentException("origHeading must be between 0 and 360");
+  		}
+  		if (newHeading < 0 || newHeading >= 360) {
+  			throw new IllegalArgumentException("newHeading must be between 0 and 360");
+  		}
+  		double angle = Math.abs(newHeading - origHeading);
+  		if (angle < 10) {
+  			return "Continue";
+  		} else if (angle < 60) {
+  			return "Turn slight right";
+  		} else if (angle < 120) {
+  			return "Turn right";
+  		} else if (angle < 179) {
+  			return "Turn sharp right";
+  		} else if (angle < 181) {
+  			return "U-turn";
+  		} else if (angle < 240) {
+  			return "Turn sharp left";
+  		} else if (angle < 300) {
+  			return "Turn left";
+  		} else if (angle < 350) {
+  			return "Turn slight left";
+  		} else {
+  			return "Continue";
+  		}
   	}
 
 }

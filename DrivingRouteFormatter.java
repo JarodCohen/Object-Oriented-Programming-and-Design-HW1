@@ -58,7 +58,29 @@ public class DrivingRouteFormatter extends RouteFormatter {
   		// and at:
   		// http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html
 		   		
-  		// TODO Implement this method
-  	}
+      if (geoFeature == null) {
+         throw new IllegalArgumentException("GeoFeature must not be null");
+      }  
+      if (origHeading < 0 || origHeading >= 360) {
+         throw new IllegalArgumentException("heading must be between 0 and 360");
+      }
 
+      StringBuffer line = new StringBuffer();
+      double distance = geoFeature.getLength();
+      String featureName = geoFeature.getName();
+      double newHeading = geoFeature.getStartHeading();
+      String turnString = getTurnString(origHeading, newHeading);
+
+      // Format the distance to one decimal place
+      DecimalFormat df = new DecimalFormat("#.#");
+      line.append(turnString);
+      line.append(" onto ");
+      line.append(featureName);
+      line.append(" and go ");
+      line.append(df.format(distance));
+      line.append(" kilometers.\n");
+
+      return line.toString();
+
+  	}
 }

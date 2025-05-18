@@ -60,6 +60,26 @@ public class WalkingRouteFormatter extends RouteFormatter {
 		// and at:
 		// http://docs.oracle.com/javase/8/docs/api/java/text/DecimalFormat.html
 					 
-  		// TODO Implement this method
+      if (geoFeature == null) {
+         throw new IllegalArgumentException("GeoFeature must not be null");
+      }
+      if (origHeading < 0 || origHeading >= 360) {
+         throw new IllegalArgumentException("heading must be between 0 and 360");
+      }
+      StringBuffer line = new StringBuffer();
+      double distance = geoFeature.getLength();
+      double time = distance  * 20; // in minutes
+      int roundedTime = (int) Math.round(time);
+      String featureName = geoFeature.getName();
+      double newHeading = geoFeature.getStartHeading();
+      String turnString = getTurnString(origHeading, newHeading);
+
+      line.append(turnString);
+      line.append(" onto ");
+      line.append(featureName);
+      line.append(" and walk for ");
+      line.append(Integer.toString(roundedTime));
+      line.append(" minutes.\n");
+      return line.toString();
   	}
 }

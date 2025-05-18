@@ -180,9 +180,9 @@ public class GeoFeature {
 		}
 
 		// Create a new list of segments including the new one
-		List<GeoSegment> newSegments = new List<GeoSegment>(this.geoSegments);
+		List<GeoSegment> newSegments = new ArrayList<GeoSegment>(this.geoSegments);
 		newSegments.add(gs);
-
+		newSegments = List.copyOf(newSegments); // Immutable copy
 		// Create and return a new GeoFeature instance
 		return new GeoFeature(
 				this.start, // start remains the same

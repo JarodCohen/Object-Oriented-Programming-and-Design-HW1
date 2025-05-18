@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+
 /**
  * A JPanel GUI for representing a Route. This Route is shown as a list of
  * GeoSegments. In addition, walking directions and driving directions for
@@ -145,7 +147,15 @@ public class RouteFormatterGUI extends JPanel {
 		DefaultListModel<GeoSegment> model =
 				(DefaultListModel<GeoSegment>)(this.lstSegments.getModel());
 		
-		// TODO Write the body of this method
+		if (route == null) {
+            route = new Route(segment);
+        } else {
+            route = route.addSegment(segment);   
+        }
+		WalkingRouteFormatter walkingDirection = new WalkingRouteFormatter();
+        txtWalkingDirections.setText(walkingDirection.computeDirections(route, 0));
+		DrivingRouteFormatter drivingDirection = new DrivingRouteFormatter();
+        txtDrivingDirections.setText(drivingDirection.computeDirections(route, 0));
 	}
 
 
