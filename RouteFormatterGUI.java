@@ -152,6 +152,7 @@ public class RouteFormatterGUI extends JPanel {
         } else {
             route = route.addSegment(segment);   
         }
+		model.addElement(segment); 
 		WalkingRouteFormatter walkingDirection = new WalkingRouteFormatter();
         txtWalkingDirections.setText(walkingDirection.computeDirections(route, 0));
 		DrivingRouteFormatter drivingDirection = new DrivingRouteFormatter();
