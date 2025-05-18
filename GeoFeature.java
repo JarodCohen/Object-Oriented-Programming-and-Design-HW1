@@ -81,6 +81,28 @@ public class GeoFeature {
 	}
 
 	/**
+	 * other constructor of Geofeature.
+	 * 
+	 * @effects Constructs a new GeoFeature, r, such that
+	 *          r.name = gs.name &&
+	 *          r.startHeading = start.heading &&
+	 *          r.endHeading = end.heading &&
+	 *          r.start = start &&
+	 *          r.end = end
+	 */
+	private GeoFeature(GeoPoint start, GeoPoint end,
+			double startHeading, double endHeading, String name,
+			double length, List<GeoSegment> segments) {
+		this.start = start;
+		this.end = end;
+		this.startHeading = startHeading;
+		this.endHeading = endHeading;
+		this.name = name;
+		this.length = length;
+		this.geoSegments = List.copyOf(segments); // Immutable copy
+	}
+
+	/**
 	 * Returns name of geographic feature.
 	 * 
 	 * @return name of geographic feature
@@ -163,12 +185,13 @@ public class GeoFeature {
 
 		// Create and return a new GeoFeature instance
 		return new GeoFeature(
-				this.name,
-				this.geoSegments.get(0), // assuming the first segment defines the start
-				newSegments,
-				gs.p2,
-				gs.heading,
-				this.length + gs.length);
+				this.start, // start remains the same
+				gs.p2, // end is the end of the new segment
+				this.startHeading, // start heading remains the same
+				gs.heading, // end heading is the heading of the new segment
+				this.name, // name remains the same
+				this.length + gs.length, // total length is updated
+				newSegments);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package homework1;
 
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * A Route is a path that traverses arbitrary GeoSegments, regardless
@@ -33,15 +34,14 @@ import java.util.Iterator;
  * </pre>
  **/
 public class Route {
-   GeoPoint start;
-   GeoPoint end;
-   double startHeading;
-   double endHeading;
-   double length;
-   GeoSegment endingGeoSegment;
-   List<GeoSegment> geoSegments;
-   List<GeoFeature> geoFeatures;
-
+   final GeoPoint start;
+   final GeoPoint end;
+   final double startHeading;
+   final double endHeading;
+   final List<GeoSegment> geoSegments;
+   final List<GeoFeature> geoFeatures;
+   final double length;
+   final GeoSegment endingGeoSegment;
    // Implementation hint:
    // When asked to return an Iterator, consider using the iterator() method
    // in the List interface. Two nice classes that implement the List
@@ -74,6 +74,20 @@ public class Route {
       this.endingGeoSegment = gs;
       this.geoSegments = List.of(gs);
       this.geoFeatures = List.of(new GeoFeature(gs));
+   }
+
+   private Route(GeoPoint start, GeoPoint end,
+         double startHeading, double endHeading,
+         double length, GeoSegment endingGeoSegment, List<GeoSegment> segments,
+         List<GeoFeature> features) {
+      this.start = start;
+      this.end = end;
+      this.startHeading = startHeading;
+      this.endHeading = endHeading;
+      this.endingGeoSegment = endingGeoSegment;
+      this.length = length;
+      this.geoSegments = List.copyOf(segments); // immutable
+      this.geoFeatures = List.copyOf(features); // immutable
    }
 
    /**
@@ -139,22 +153,32 @@ public class Route {
       if (gs == null) {
          throw new IllegalArgumentException("GeoSegment cannot be null");
       }
-      if (!this.end.equals(gs.p1)) {
-         throw new IllegalArgumentException("GeoSegment does not connect to the end of the route");
+      if (!this.end.equals(gs.p1) || !this.name.equals(gs.name)) {
+         throw new IllegalArgumentException("GeoSegment does not match");
       }
-      Route newRoute = new Route(gs);
-      newRoute.start = this.start;
-      newRoute.startHeading = this.startHeading;
-      newRoute.length = this.length + gs.length;
-      newRoute.end = gs.p2;
-      newRoute.endHeading = gs.heading;
-      newRoute.geoSegments = List.of(this.geoSegments, gs);
-      if (geoFeatures(geoFeatures.size() - 1).name.equals(gs.name)) {
-         this.geoFeatures.get(geoFeatures.size() - 1).addSegment(gs);
-         newRoute.geoFeatures = this.geoFeatures;
-      } else
-         newRoute.geoFeatures = List.of(this.geoFeatures, new GeoFeature(gs));
-      return newRoute;
+
+      List<GeoSegment> newSegments = new List<GeoSegment>(this.geoSegments);
+      newSegments.add(gs);
+      List<GeoFeature> newGeoFeatures;
+      if (geoFeatures.get(-1).getName().equals(gs.getName())) {
+         newGeoFeatures = new List<GeoFeature>(this.geoFeatures);
+         GeoFeature tmp = geoFeatures.get(-1).addSegment(gs);
+         newGeoFeatures.remove(-1);
+         newGeoFeatures.add(tmp);
+      } else {
+         newGeoFeatures = new List<GeoFeature>(this.geoFeatures);
+         newGeoFeatures.add(new GeoFeature(gs));
+      }
+
+      return new Route(
+            this.start,
+            gs.p2,
+            this.startHeading,
+            gs.heading,
+            this.length + gs.length,
+            gs,
+            newSegments,
+            newGeoFeatures);
    }
 
    /**
