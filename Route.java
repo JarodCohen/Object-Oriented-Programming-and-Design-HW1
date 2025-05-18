@@ -149,8 +149,11 @@ public class Route {
       newRoute.end = gs.p2;
       newRoute.endHeading = gs.heading;
       newRoute.geoSegments = List.of(this.geoSegments, gs);
-      if()
-      newRoute.geoFeatures = List.of(this.geoFeatures, new GeoFeature(gs));
+      if (geoFeatures(geoFeatures.size() - 1).name.equals(gs.name)) {
+         this.geoFeatures.get(geoFeatures.size() - 1).addSegment(gs);
+         newRoute.geoFeatures = this.geoFeatures;
+      } else
+         newRoute.geoFeatures = List.of(this.geoFeatures, new GeoFeature(gs));
       return newRoute;
    }
 

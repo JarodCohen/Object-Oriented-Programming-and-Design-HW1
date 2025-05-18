@@ -1,5 +1,6 @@
 package homework1;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,13 +39,13 @@ import java.util.List;
  * </pre>
  **/
 public class GeoFeature {
-	GeoPoint start;
-	GeoPoint end;
-	double startHeading;
-	double endHeading;
+	final GeoPoint start;
+	final GeoPoint end;
+	final double startHeading;
+	final double endHeading;
 	final String name;
-	double length;
-	List<GeoSegment> geoSegments;
+	final double length;
+	final List<GeoSegment> geoSegments;
 	// Implementation hint:
 	// When asked to return an Iterator, consider using the iterator() method
 	// in the List interface. Two nice classes that implement the List
@@ -155,11 +156,19 @@ public class GeoFeature {
 		if (!this.end.equals(gs.p1) || !this.name.equals(gs.name)) {
 			throw new IllegalArgumentException("GeoSegment does not match");
 		}
-		this.geoSegments.add(gs);
-		this.end = gs.p2;
-		this.endHeading = gs.heading;
-		this.length += gs.length;
-		return this;
+
+		// Create a new list of segments including the new one
+		List<GeoSegment> newSegments = new List<GeoSegment>(this.geoSegments);
+		newSegments.add(gs);
+
+		// Create and return a new GeoFeature instance
+		return new GeoFeature(
+				this.name,
+				this.geoSegments.get(0), // assuming the first segment defines the start
+				newSegments,
+				gs.p2,
+				gs.heading,
+				this.length + gs.length);
 	}
 
 	/**
