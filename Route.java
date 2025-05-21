@@ -51,8 +51,26 @@ public class Route {
    // info can be found at:
    // http://docs.oracle.com/javase/8/docs/api/java/util/List.html
 
-   // TODO Write abstraction function and representation invariant
+   // Abs. Function: Represents a route composed of one or more segments connected to each others
+   // by its start and end points, start and end headings, its length and  its last segment, and the lists of the segments and 
+   // features that compose it.
+   // Rep. Invariant: start != null && end != null && startHeading >= 0 && endHeading >= 0 &&
+   // startHeading < 360 && endHeading < 360 && length >= 0 &&
+   // geoSegments != null && geoFeatures != null && geoSegment[this.size(-1)] == endingGeoSegment && 
+   // for each i < geoFeatures.size()-2 : geoFeatures.get(i).name != geoFeatures.get(i+1).name.
 
+   void checkRep() {
+      assert start != null;
+      assert end != null;
+      assert startHeading >= 0 && endHeading >= 0;
+      assert startHeading < 360 && endHeading < 360;
+      assert length >= 0;
+      assert geoSegments != null && geoFeatures != null;
+      assert geoSegments.get(geoSegments.size() - 1).equals(endingGeoSegment);
+      for (int i = 0; i < geoFeatures.size() - 1; i++) {
+         assert !geoFeatures.get(i).getName().equals(geoFeatures.get(i + 1).getName());
+      }
+   }
    /**
     * Constructs a new Route.
     * 
@@ -75,6 +93,7 @@ public class Route {
       this.endingGeoSegment = gs;
       this.geoSegments = List.of(gs);
       this.geoFeatures = List.of(new GeoFeature(gs));
+      checkRep();
    }
 
    private Route(GeoPoint start, GeoPoint end,
@@ -89,6 +108,7 @@ public class Route {
       this.length = length;
       this.geoSegments = List.copyOf(segments); // immutable
       this.geoFeatures = List.copyOf(features); // immutable
+      checkRep();
    }
 
    /**
@@ -114,6 +134,7 @@ public class Route {
     * 
     * @return direction (in compass heading) of travel at the start of the
     *         route, in degrees.
+    *         returns 0 if the first segment's length is 0.
     **/
    public double getStartHeading() {
       return startHeading;
@@ -124,6 +145,7 @@ public class Route {
     * 
     * @return direction (in compass heading) of travel at the end of the
     *         route, in degrees.
+   *          returns 0 if the first segment's length is 0.
     **/
    public double getEndHeading() {
       return endHeading;
@@ -173,7 +195,7 @@ public class Route {
          newGeoFeatures = new ArrayList<GeoFeature>(this.geoFeatures);
          newGeoFeatures.add(new GeoFeature(gs));
       }
-
+      checkRep();
       return new Route(
             this.start,
             gs.p2,

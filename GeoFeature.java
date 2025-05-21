@@ -53,8 +53,12 @@ public class GeoFeature {
 	// equality is needed, consider using the equals() method of List. More
 	// info can be found at:
 	// http://docs.oracle.com/javase/8/docs/api/java/util/List.html
-
-	// TODO Write abstraction function and representation invariant
+	// Abs. Function: Represents a Geofeature composed of one or more segments connected to each others 
+	// by its name, start and end points, start and end headings and its length.
+	// Rep. Invariant: start != null && end != null && startHeading >= 0 && endHeading >= 0 &&
+	// startHeading < 360 && endHeading < 360 && name != null && length >= 0 &&
+	// geoSegments != null && geoSegments.size() > 0 && for each i < geoSegments.size() :
+	// geoSegments.get(i).name == name.
 
 	/**
 	 * Constructs a new GeoFeature.
@@ -78,8 +82,17 @@ public class GeoFeature {
 		this.name = gs.name;
 		this.length = gs.length;
 		this.geoSegments = List.of(gs);
+		checkRep();
 	}
 
+	void checkRep() {
+		assert (start != null && end != null && startHeading >= 0 && endHeading >= 0
+				&& startHeading < 360 && endHeading < 360 && name != null
+				&& length >= 0 && geoSegments != null && geoSegments.size() > 0);
+		for (int i = 0; i < geoSegments.size(); i++) {
+			assert (geoSegments.get(i).name.equals(name));
+		}
+	}
 	/**
 	 * other constructor of Geofeature.
 	 * 
@@ -100,6 +113,7 @@ public class GeoFeature {
 		this.name = name;
 		this.length = length;
 		this.geoSegments = List.copyOf(segments); // Immutable copy
+		checkRep();
 	}
 
 	/**
@@ -134,6 +148,8 @@ public class GeoFeature {
 	 * 
 	 * @return direction (in standard heading) of travel at the start of the
 	 *         geographic feature, in degrees.
+	 *         If the first segment's length is 0, then returns 0.
+	 * 
 	 */
 	public double getStartHeading() {
 		return startHeading;
@@ -144,6 +160,7 @@ public class GeoFeature {
 	 * 
 	 * @return direction (in standard heading) of travel at the end of the
 	 *         geographic feature, in degrees.
+	 * 	   	   If the last segment's length is 0, then returns 0.
 	 */
 	public double getEndHeading() {
 		return endHeading;
@@ -183,6 +200,7 @@ public class GeoFeature {
 		List<GeoSegment> newSegments = new ArrayList<GeoSegment>(this.geoSegments);
 		newSegments.add(gs);
 		newSegments = List.copyOf(newSegments); // Immutable copy
+		checkRep();
 		// Create and return a new GeoFeature instance
 		return new GeoFeature(
 				this.start, // start remains the same
@@ -216,7 +234,6 @@ public class GeoFeature {
 	 * @see homework1.GeoSegment
 	 */
 	public Iterator<GeoSegment> getGeoSegments() {
-		// TODO Implement this method
 		return geoSegments.iterator();
 	}
 

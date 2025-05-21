@@ -1,0 +1,56 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "GeoSegmentTest",
+            "request": "launch",
+            "mainClass": "homework1.GeoSegmentTest",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "RouteFormatterGUI",
+            "request": "launch",
+            "mainClass": "homework1.RouteFormatterGUI",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "DrivingRouteFormatterTest",
+            "request": "launch",
+            "mainClass": "homework1.DrivingRouteFormatterTest",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "WalkingRouteFormatterTest",
+            "request": "launch",
+            "mainClass": "homework1.WalkingRouteFormatterTest",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Launch Program",
+            "request": "launch",
+            "mainClass": "com.example.Main",
+            "projectName": "java-project"
+        },
+        {
+            "type": "java",
+            "name": "Debug Program",
+            "request": "launch",
+            "mainClass": "homework1.WalkingRouteFormatterTest",
+            "projectName": "Object-Oriented-Programming-and-Design-HW1"
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}

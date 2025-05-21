@@ -1,5 +1,7 @@
 package homework1;
 
+import java.util.Objects;
+
 /**
  * A GeoSegment models a straight line segment on the earth. GeoSegments
  * are immutable.
@@ -49,11 +51,15 @@ public class GeoSegment {
 	final double length;
 	final double heading;
 
+	// Abs. Function: Represents a segment joining two Geo Points, its length, its direction and its name.
+	// Rep. Invariant: name != null && p1 != null && p2 != null && heading >= 0 && heading < 360
+
 	/**
 	 * Constructs a new GeoSegment with the specified name and endpoints.
 	 * 
 	 * @requires name != null && p1 != null && p2 != null
 	 * @effects constructs a new GeoSegment with the specified name and endpoints.
+	 * 		if p1 and p2 are the same point, the length is 0 and the heading is 0.
 	 **/
 	public GeoSegment(String name, GeoPoint p1, GeoPoint p2) {
 		if (name == null || p1 == null || p2 == null) {
@@ -63,7 +69,17 @@ public class GeoSegment {
 		this.p1 = p1;
 		this.p2 = p2;
 		this.length = p1.distanceTo(p2);
-		this.heading = p1.headingTo(p2);
+		if (p1.equals(p2)) {
+			this.heading = 0;
+		}
+		else {
+			this.heading = p1.headingTo(p2);
+		}
+		checkRep();
+	}
+
+	void checkRep() {
+		assert(name != null && p1 != null && p2 != null && heading >= 0 && heading < 360);
 	}
 
 	/**
@@ -73,6 +89,7 @@ public class GeoSegment {
 	 *         && gs.p1 = this.p2 && gs.p2 = this.p1
 	 **/
 	public GeoSegment reverse() {
+		
 		return new GeoSegment(name, p2, p1);
 	}
 

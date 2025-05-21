@@ -69,7 +69,9 @@ public class GeoPoint {
 	// and distance computations). Because of this, you should consider
 	// using ints for your internal representation of GeoPoint.
 
-	// TODO Write abstraction function and representation invariant
+	// Abs. Function: {p.latitude, p.longitude} where p is a GeoPoint object
+	//Rep. Invariant:(MIN_LATITUDE <= p.latitude <= MAX_LATITUDE) &&
+	//         (MIN_LONGITUDE <= p.longitude <= MAX_LONGITUDE)
 
 	/**
 	 * Constructs GeoPoint from a latitude and longitude.
@@ -86,6 +88,7 @@ public class GeoPoint {
 		GeoPoint.checkLongitude(longitude);
 		this.latitude = latitude;
 		this.longitude = longitude;
+		checkRep();
 	}
 
 	/**
@@ -110,6 +113,18 @@ public class GeoPoint {
 		if (longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
 			throw new IllegalArgumentException("Invalid longitude: " + longitude);
 		}
+	}
+
+	/**
+	 * Checks the representation invariant.
+	 * 
+	 * @effects throws IllegalStateException if the representation
+	 *          invariant is violated
+	 **/
+	private void checkRep() {
+		assert(latitude >= MIN_LATITUDE && latitude <= MAX_LATITUDE);
+		
+		assert(longitude >= MIN_LONGITUDE && longitude <= MAX_LONGITUDE);
 	}
 
 	// }
